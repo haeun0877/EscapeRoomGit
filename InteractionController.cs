@@ -15,12 +15,11 @@ public class InteractionController : MonoBehaviour
 
     [SerializeField] GameObject Obtain;
 
-    [SerializeField] GameObject book; //test
-
     RaycastHit hitInfo;
     ItemScript itemBar;
 
-    GameObject[] ObtainItems = new GameObject[3];
+    ItemWindowScript itemWindow;
+    ObtainImage obtainImageS;
 
     bool interacting;
 
@@ -28,6 +27,8 @@ public class InteractionController : MonoBehaviour
     {
         itemBar = FindObjectOfType<ItemScript>();
         interacting = false;
+        itemWindow = FindObjectOfType<ItemWindowScript>();
+        obtainImageS = FindObjectOfType<ObtainImage>();
     }
 
     // Update is called once per frame
@@ -125,7 +126,7 @@ public class InteractionController : MonoBehaviour
                 Obtain.SetActive(false);
                 TextBar.SetActive(false);
                 interacting = false;
-                SpawnItem();
+                itemWindow.StartCoroutine("obtainItem");
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
@@ -137,8 +138,4 @@ public class InteractionController : MonoBehaviour
         
     }
 
-    void SpawnItem()
-    {
-        ObtainItems[0] = Instantiate(book, new Vector3(0, 30, 0), Quaternion.identity);
-    }
 }

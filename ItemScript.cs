@@ -18,7 +18,7 @@ public class ItemScript : MonoBehaviour
     {
         item.onClick.AddListener(Click);
     }
-    void Click()
+    public void Click()
     {
         itemWindow.showAnim();
         this.gameObject.SetActive(false);
