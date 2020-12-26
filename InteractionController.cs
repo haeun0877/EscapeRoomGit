@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractionController : MonoBehaviour
 {
@@ -9,12 +10,31 @@ public class InteractionController : MonoBehaviour
     [SerializeField] GameObject go_NomalCrosshair;
     [SerializeField] GameObject go_InteractiveCrosshair;
 
+    [SerializeField] GameObject TextBar;
+    [SerializeField] Text text;
+
+    [SerializeField] GameObject Obtain;
+
+    [SerializeField] GameObject book; //test
+
     RaycastHit hitInfo;
+    ItemScript itemBar;
+
+    GameObject[] ObtainItems = new GameObject[3];
+
+    bool interacting;
+
+    private void Start()
+    {
+        itemBar = FindObjectOfType<ItemScript>();
+        interacting = false;
+    }
 
     // Update is called once per frame
     void Update()
     {
         CheckObject();
+        inputKey();
     }
 
     void CheckObject()
@@ -34,10 +54,49 @@ public class InteractionController : MonoBehaviour
 
     void Contact()
     {
-        if (hitInfo.transform.CompareTag("key")|| hitInfo.transform.CompareTag("box")|| hitInfo.transform.CompareTag("picture"))
+        if (hitInfo.transform.CompareTag("key"))
         {
             go_InteractiveCrosshair.SetActive(true);
             go_NomalCrosshair.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                text.text = "열쇠가 필요합니다";
+                TextBar.SetActive(true);
+            }
+            
+        }
+        else if (hitInfo.transform.CompareTag("box"))
+        {
+            go_InteractiveCrosshair.SetActive(true);
+            go_NomalCrosshair.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                text.text = "박스를 치우시겠습니까?";
+                TextBar.SetActive(true);
+            }
+        }
+        else if (hitInfo.transform.CompareTag("picture"))
+        {
+            go_InteractiveCrosshair.SetActive(true);
+            go_NomalCrosshair.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                text.text = "그림입니다";
+                TextBar.SetActive(true);
+            }
+        }
+        else if (hitInfo.transform.CompareTag("interacte"))
+        {
+            go_InteractiveCrosshair.SetActive(true);
+            go_NomalCrosshair.SetActive(false);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                interacting = true;
+                Obtain.SetActive(true);
+                text.text = "아이템을 획득하시겠습니까?";
+                TextBar.SetActive(true);
+            }
         }
         else
         {
@@ -49,5 +108,37 @@ public class InteractionController : MonoBehaviour
     {
         go_InteractiveCrosshair.SetActive(false);
         go_NomalCrosshair.SetActive(true);
+        if (!interacting)
+        {
+            TextBar.SetActive(false);
+        }
+        
+    }
+
+    void inputKey()
+    {
+        if (interacting)
+        {
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                itemBar.Click();
+                Obtain.SetActive(false);
+                TextBar.SetActive(false);
+                interacting = false;
+                SpawnItem();
+            }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                Obtain.SetActive(false);
+                TextBar.SetActive(false);
+                interacting = false;
+            }
+        }  
+        
+    }
+
+    void SpawnItem()
+    {
+        ObtainItems[0] = Instantiate(book, new Vector3(0, 30, 0), Quaternion.identity);
     }
 }
