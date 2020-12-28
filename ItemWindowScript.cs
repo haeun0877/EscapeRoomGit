@@ -45,7 +45,7 @@ public class ItemWindowScript : MonoBehaviour
             item[itemNum] = Instantiate(book, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
             item[itemNum].transform.SetParent(this.transform, false);
             item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
-            item[itemNum].GetComponent<Animation>().Play("spawnImage");
+            item[itemNum].transform.GetComponent<Animation>().Play();
         }
 
         itemNum += 1;

@@ -127,6 +127,8 @@ public class InteractionController : MonoBehaviour
                 TextBar.SetActive(false);
                 interacting = false;
                 itemWindow.StartCoroutine("obtainItem");
+                hitInfo.collider.gameObject.SetActive(false);
+               
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
