@@ -9,12 +9,15 @@ public class ItemWindowScript : MonoBehaviour
     [SerializeField] Image book;
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
-    Image item;
+    Image[] item;
+    int itemNum;
 
 
     void Start()
     {
         anim = GetComponent<Animation>();
+        item = new Image[5];
+        itemNum = 0;
     }
 
     private void Update()
@@ -37,9 +40,15 @@ public class ItemWindowScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        item = Instantiate(book, new Vector3(-400f, -10f, 0), Quaternion.identity);
-        item.transform.SetParent(this.transform, false);
-        item.transform.localScale = new Vector3(0.2f, 1f, 0.2f);
+        if (itemNum <= item.Length)
+        {
+            item[itemNum] = Instantiate(book, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
+            item[itemNum].transform.SetParent(this.transform, false);
+            item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
+            item[itemNum].GetComponent<Animation>().Play("spawnImage");
+        }
+
+        itemNum += 1;
     }
 
     IEnumerator showItemButton()
