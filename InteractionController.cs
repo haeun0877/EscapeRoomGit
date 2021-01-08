@@ -15,11 +15,14 @@ public class InteractionController : MonoBehaviour
 
     [SerializeField] GameObject Obtain;
     [SerializeField] Image ObtainImage;
+    [SerializeField] Text ObtainText;
 
     RaycastHit hitInfo;
     ItemScript itemBar;
 
     ItemWindowScript itemWindow;
+
+    Sprite[] sprites;
 
     bool interacting;
 
@@ -29,6 +32,7 @@ public class InteractionController : MonoBehaviour
         interacting = false;
         itemWindow = FindObjectOfType<ItemWindowScript>();
 
+        sprites = Resources.LoadAll<Sprite>("Item");
     }
 
     // Update is called once per frame
@@ -102,8 +106,9 @@ public class InteractionController : MonoBehaviour
             {
                 interacting = true;
                 Obtain.SetActive(true);
-                text.text = "아이템을 획득하시겠습니까? (y/n)";
+                text.text = "책을 획득하시겠습니까? (y/n)";
                 TextBar.SetActive(true);
+                ObtainText.text = "책";
             }
             inputKey("book");
         }
@@ -116,9 +121,10 @@ public class InteractionController : MonoBehaviour
             {
                 interacting = true;
                 Obtain.SetActive(true);
-                ObtainImage.sprite = Resources.Load<Sprite>("Item\bookImage");
+                ObtainImage.sprite = sprites[2];
                 text.text = "은색 키를 획득하시겠습니까? (y/n)";
                 TextBar.SetActive(true);
+                ObtainText.text = "은색키";
             }
             inputKey("silverKey");
         }

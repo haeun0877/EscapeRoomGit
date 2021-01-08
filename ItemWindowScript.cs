@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ItemWindowScript : MonoBehaviour
 {
     private Animation anim;
-    Image image;
+    [SerializeField] Image image;
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
     Image[] item;
@@ -51,11 +51,11 @@ public class ItemWindowScript : MonoBehaviour
         }
         if (imageName == "silverKey")
         {
-            //image = silverKey;
+            image.GetComponent<Image>().sprite = sprites[2];
         }
         if (imageName == "goldKey")
         {
-            //image = goldKey;
+            image.GetComponent<Image>().sprite = sprites[1];
         }
 
         if (itemNum <= item.Length)
