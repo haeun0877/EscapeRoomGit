@@ -6,18 +6,23 @@ using UnityEngine.UI;
 public class ItemWindowScript : MonoBehaviour
 {
     private Animation anim;
-    [SerializeField] Image book;
+    Image image;
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
     Image[] item;
     int itemNum;
+    Sprite[] sprites;
 
+    ObtainImage itemImage;
 
     void Start()
     {
         anim = GetComponent<Animation>();
         item = new Image[5];
         itemNum = 0;
+
+        itemImage = FindObjectOfType<ObtainImage>();
+        sprites = Resources.LoadAll<Sprite>("Item");
     }
 
     private void Update()
@@ -36,16 +41,33 @@ public class ItemWindowScript : MonoBehaviour
         StartCoroutine("showItemButton");
     }
     
-    IEnumerator obtainItem()
+    IEnumerator obtainItem(string imageName)
     {
         yield return new WaitForSeconds(0.5f);
 
+        if (imageName == "book")
+        {
+            image.GetComponent<Image>().sprite = sprites[0];
+        }
+        if (imageName == "silverKey")
+        {
+            //image = silverKey;
+        }
+        if (imageName == "goldKey")
+        {
+            //image = goldKey;
+        }
+
         if (itemNum <= item.Length)
         {
-            item[itemNum] = Instantiate(book, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
-            item[itemNum].transform.SetParent(this.transform, false);
-            item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
-            item[itemNum].transform.GetComponent<Animation>().Play();
+            if (image != null)
+            {
+                item[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
+                item[itemNum].transform.SetParent(this.transform, false);
+                item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
+                item[itemNum].transform.GetComponent<Animation>().Play();
+            }
+
         }
 
         itemNum += 1;
@@ -55,6 +77,7 @@ public class ItemWindowScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         ItemButton.SetActive(true);
+        //itemImage.hideGuide();
     }
 
 }

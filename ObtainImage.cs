@@ -1,25 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ObtainImage : MonoBehaviour
+public class ObtainImage : MonoBehaviour, IPointerClickHandler
 {
-    Animation show;
+    [SerializeField] GameObject obtain;
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
+
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            obtain.SetActive(true);
+            obtain.transform.position += new Vector3(400f, -250f, 0f);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        show = GetComponent<Animation>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void startAnim()
+    public void hideGuide()
     {
-        show.Play("spawnImage");
+        obtain.SetActive(false);
+    }
+
+    void InputKey()
+    {
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+
+        }
     }
 }

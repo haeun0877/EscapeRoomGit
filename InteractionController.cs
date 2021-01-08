@@ -14,12 +14,12 @@ public class InteractionController : MonoBehaviour
     [SerializeField] Text text;
 
     [SerializeField] GameObject Obtain;
+    [SerializeField] Image ObtainImage;
 
     RaycastHit hitInfo;
     ItemScript itemBar;
 
     ItemWindowScript itemWindow;
-    ObtainImage obtainImageS;
 
     bool interacting;
 
@@ -28,14 +28,13 @@ public class InteractionController : MonoBehaviour
         itemBar = FindObjectOfType<ItemScript>();
         interacting = false;
         itemWindow = FindObjectOfType<ItemWindowScript>();
-        obtainImageS = FindObjectOfType<ObtainImage>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckObject();
-        inputKey();
     }
 
     void CheckObject()
@@ -55,7 +54,7 @@ public class InteractionController : MonoBehaviour
 
     void Contact()
     {
-        if (hitInfo.transform.CompareTag("key"))
+        if (hitInfo.transform.CompareTag("cabinet"))
         {
             go_InteractiveCrosshair.SetActive(true);
             go_NomalCrosshair.SetActive(false);
@@ -72,9 +71,17 @@ public class InteractionController : MonoBehaviour
             go_NomalCrosshair.SetActive(false);
             if (Input.GetMouseButtonDown(0))
             {
-                text.text = "박스를 치우시겠습니까?";
+                text.text = "박스를 치우시겠습니까? (y/n)";
                 TextBar.SetActive(true);
             }
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                Obtain.SetActive(false);
+                TextBar.SetActive(false);
+                interacting = false;
+                hitInfo.collider.gameObject.SetActive(false);
+            }
+
         }
         else if (hitInfo.transform.CompareTag("picture"))
         {
@@ -95,9 +102,25 @@ public class InteractionController : MonoBehaviour
             {
                 interacting = true;
                 Obtain.SetActive(true);
-                text.text = "아이템을 획득하시겠습니까?";
+                text.text = "아이템을 획득하시겠습니까? (y/n)";
                 TextBar.SetActive(true);
             }
+            inputKey("book");
+        }
+        else if (hitInfo.transform.CompareTag("silverkey"))
+        {
+            go_InteractiveCrosshair.SetActive(true);
+            go_NomalCrosshair.SetActive(false);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                interacting = true;
+                Obtain.SetActive(true);
+                ObtainImage.sprite = Resources.Load<Sprite>("Item\bookImage");
+                text.text = "은색 키를 획득하시겠습니까? (y/n)";
+                TextBar.SetActive(true);
+            }
+            inputKey("silverKey");
         }
         else
         {
@@ -116,7 +139,7 @@ public class InteractionController : MonoBehaviour
         
     }
 
-    void inputKey()
+    void inputKey(string image)
     {
         if (interacting)
         {
@@ -126,7 +149,7 @@ public class InteractionController : MonoBehaviour
                 Obtain.SetActive(false);
                 TextBar.SetActive(false);
                 interacting = false;
-                itemWindow.StartCoroutine("obtainItem");
+                itemWindow.StartCoroutine("obtainItem", image);
                 hitInfo.collider.gameObject.SetActive(false);
                
             }
