@@ -15,7 +15,6 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
         if(eventData.button == PointerEventData.InputButton.Left)
         {
             obtain.SetActive(true);
-            obtain.transform.position += new Vector3(400f, -250f, 0f);
         }
     }
 

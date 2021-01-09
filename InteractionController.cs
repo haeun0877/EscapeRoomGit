@@ -106,6 +106,7 @@ public class InteractionController : MonoBehaviour
             {
                 interacting = true;
                 Obtain.SetActive(true);
+                ObtainImage.sprite = sprites[0];
                 text.text = "책을 획득하시겠습니까? (y/n)";
                 TextBar.SetActive(true);
                 ObtainText.text = "책";
