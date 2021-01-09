@@ -9,6 +9,7 @@ public class ItemWindowScript : MonoBehaviour
     [SerializeField] Image image;
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
+    [SerializeField] Sprite frameSprite;
     Image[] item;
     int itemNum;
     Sprite[] sprites;
@@ -58,6 +59,7 @@ public class ItemWindowScript : MonoBehaviour
             image.GetComponent<Image>().sprite = sprites[1];
         }
 
+
         if (itemNum <= item.Length)
         {
             if (image != null)
@@ -65,9 +67,7 @@ public class ItemWindowScript : MonoBehaviour
                 item[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
                 item[itemNum].transform.SetParent(this.transform, false);
                 item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
-                item[itemNum].transform.GetComponent<Animation>().Play();
             }
-
         }
 
         itemNum += 1;

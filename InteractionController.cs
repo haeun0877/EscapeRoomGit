@@ -21,18 +21,24 @@ public class InteractionController : MonoBehaviour
     ItemScript itemBar;
 
     ItemWindowScript itemWindow;
+    MoveScript moveScript;
 
     Sprite[] sprites;
 
     bool interacting;
+    bool click;
 
     private void Start()
     {
         itemBar = FindObjectOfType<ItemScript>();
         interacting = false;
+        click = false;
         itemWindow = FindObjectOfType<ItemWindowScript>();
+        moveScript = FindObjectOfType<MoveScript>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
+
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -60,13 +66,7 @@ public class InteractionController : MonoBehaviour
     {
         if (hitInfo.transform.CompareTag("cabinet"))
         {
-            go_InteractiveCrosshair.SetActive(true);
-            go_NomalCrosshair.SetActive(false);
-            if (Input.GetMouseButtonDown(0))
-            {
-                text.text = "열쇠가 필요합니다";
-                TextBar.SetActive(true);
-            }
+            justThingGuide("열쇠가 필요합니다");
             
         }
         else if (hitInfo.transform.CompareTag("box"))
@@ -75,42 +75,36 @@ public class InteractionController : MonoBehaviour
             go_NomalCrosshair.SetActive(false);
             if (Input.GetMouseButtonDown(0))
             {
+                moveScript.click = true;// 캐릭터의 시선 움직임을 고정시킴
                 text.text = "박스를 치우시겠습니까? (y/n)";
                 TextBar.SetActive(true);
+                click = true; 
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
+                moveScript.click = false;
                 Obtain.SetActive(false);
                 TextBar.SetActive(false);
                 interacting = false;
                 hitInfo.collider.gameObject.SetActive(false);
             }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                moveScript.click = false;
+                interacting = false;
+            }
 
         }
         else if (hitInfo.transform.CompareTag("picture"))
         {
-            go_InteractiveCrosshair.SetActive(true);
-            go_NomalCrosshair.SetActive(false);
-            if (Input.GetMouseButtonDown(0))
-            {
-                text.text = "그림입니다";
-                TextBar.SetActive(true);
-            }
+            justThingGuide("그림입니다");
         }
         else if (hitInfo.transform.CompareTag("interacte"))
         {
             go_InteractiveCrosshair.SetActive(true);
             go_NomalCrosshair.SetActive(false);
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                interacting = true;
-                Obtain.SetActive(true);
-                ObtainImage.sprite = sprites[0];
-                text.text = "책을 획득하시겠습니까? (y/n)";
-                TextBar.SetActive(true);
-                ObtainText.text = "책";
-            }
+            obtainItemGuide("책", 0);
             inputKey("book");
         }
         else if (hitInfo.transform.CompareTag("silverkey"))
@@ -118,15 +112,7 @@ public class InteractionController : MonoBehaviour
             go_InteractiveCrosshair.SetActive(true);
             go_NomalCrosshair.SetActive(false);
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                interacting = true;
-                Obtain.SetActive(true);
-                ObtainImage.sprite = sprites[2];
-                text.text = "은색 키를 획득하시겠습니까? (y/n)";
-                TextBar.SetActive(true);
-                ObtainText.text = "은색키";
-            }
+            obtainItemGuide("은색키", 2);
             inputKey("silverKey");
         }
         else
@@ -167,7 +153,30 @@ public class InteractionController : MonoBehaviour
                 interacting = false;
             }
         }  
-        
+    }
+
+    void obtainItemGuide(string name, int imageNum)
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            interacting = true;
+            Obtain.SetActive(true);
+            ObtainImage.sprite = sprites[imageNum];
+            text.text = name + " 획득하시겠습니까? (y/n)";
+            TextBar.SetActive(true);
+            ObtainText.text = name;
+        }
+    }
+
+    void justThingGuide(string bartext)
+    {
+        go_InteractiveCrosshair.SetActive(true);
+        go_NomalCrosshair.SetActive(false);
+        if (Input.GetMouseButtonDown(0))
+        {
+            text.text = bartext;
+            TextBar.SetActive(true);
+        }
     }
 
 }

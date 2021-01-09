@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 public class ObtainImage : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] GameObject obtain;
+    [SerializeField] GameObject textBar;
+    [SerializeField] Text text;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -15,6 +17,8 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
         if(eventData.button == PointerEventData.InputButton.Left)
         {
             obtain.SetActive(true);
+            textBar.SetActive(true);
+            text.text = "아이템을 사용하시겠습니까?";
         }
     }
 
@@ -32,6 +36,7 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
     public void hideGuide()
     {
         obtain.SetActive(false);
+        textBar.SetActive(false);
     }
 
     void InputKey()
