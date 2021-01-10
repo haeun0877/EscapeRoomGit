@@ -6,9 +6,8 @@ using UnityEngine.EventSystems;
 
 public class ObtainImage : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] GameObject obtain;
-    [SerializeField] GameObject textBar;
-    [SerializeField] Text text;
+
+    InteractionController controller;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -16,15 +15,19 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
 
         if(eventData.button == PointerEventData.InputButton.Left)
         {
-            obtain.SetActive(true);
-            textBar.SetActive(true);
-            text.text = "아이템을 사용하시겠습니까?";
+            controller.obtainvisual();
         }
+        if (this.gameObject.name == "frame(Clone)")
+        {
+            //프레임을 클릭하면 색깔 어둡게
+        }
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        controller = FindObjectOfType<InteractionController>();
     }
 
     // Update is called once per frame
@@ -33,11 +36,6 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
 
     }
 
-    public void hideGuide()
-    {
-        obtain.SetActive(false);
-        textBar.SetActive(false);
-    }
 
     void InputKey()
     {

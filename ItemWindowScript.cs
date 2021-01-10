@@ -6,10 +6,9 @@ using UnityEngine.UI;
 public class ItemWindowScript : MonoBehaviour
 {
     private Animation anim;
-    [SerializeField] Image image;
+    public Image[] image;
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
-    [SerializeField] Sprite frameSprite;
     Image[] item;
     int itemNum;
     Sprite[] sprites;
@@ -46,27 +45,24 @@ public class ItemWindowScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        if (imageName == "book")
-        {
-            image.GetComponent<Image>().sprite = sprites[0];
-        }
-        if (imageName == "silverKey")
-        {
-            image.GetComponent<Image>().sprite = sprites[2];
-        }
-        if (imageName == "goldKey")
-        {
-            image.GetComponent<Image>().sprite = sprites[1];
-        }
-
-
         if (itemNum <= item.Length)
         {
             if (image != null)
             {
-                item[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 100f), -10f, 0), Quaternion.identity);
-                item[itemNum].transform.SetParent(this.transform, false);
-                item[itemNum].transform.localScale = new Vector3(0.2f, 1f, 0.2f);
+                if (imageName == "book")
+                {
+                    instantiateItem(itemNum, image[0]);
+                }
+                if (imageName == "silverKey")
+                {
+                    instantiateItem(itemNum, image[1]);
+                }
+                if (imageName == "goldKey")
+                {
+                    instantiateItem(itemNum, image[2]);
+                }
+                instantiateItem(itemNum, image[3]);
+                item[itemNum].transform.localScale = new Vector3(0.3f, 1.5f, 0.2f);
             }
         }
 
@@ -80,4 +76,10 @@ public class ItemWindowScript : MonoBehaviour
         //itemImage.hideGuide();
     }
 
+    void instantiateItem(int itemNum, Image image)
+    {
+        item[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 130f), 25f, 0), Quaternion.identity);
+        item[itemNum].transform.SetParent(this.transform, false);
+        item[itemNum].transform.localScale = new Vector3(0.2f, 0.8f, 0.2f);
+    }
 }

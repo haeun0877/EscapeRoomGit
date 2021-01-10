@@ -17,6 +17,8 @@ public class InteractionController : MonoBehaviour
     [SerializeField] Image ObtainImage;
     [SerializeField] Text ObtainText;
 
+    [SerializeField] GameObject panel;
+
     RaycastHit hitInfo;
     ItemScript itemBar;
 
@@ -144,13 +146,14 @@ public class InteractionController : MonoBehaviour
                 interacting = false;
                 itemWindow.StartCoroutine("obtainItem", image);
                 hitInfo.collider.gameObject.SetActive(false);
-               
+                panel.SetActive(false);
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
                 Obtain.SetActive(false);
                 TextBar.SetActive(false);
                 interacting = false;
+                panel.SetActive(false);
             }
         }  
     }
@@ -165,6 +168,7 @@ public class InteractionController : MonoBehaviour
             text.text = name + " 획득하시겠습니까? (y/n)";
             TextBar.SetActive(true);
             ObtainText.text = name;
+            panel.SetActive(true);
         }
     }
 
@@ -177,6 +181,15 @@ public class InteractionController : MonoBehaviour
             text.text = bartext;
             TextBar.SetActive(true);
         }
+    }
+
+    public void obtainvisual()
+    {
+        Obtain.SetActive(true);
+        TextBar.SetActive(true);
+        panel.SetActive(true);
+        text.text = "아이템을 사용하시겠습니까?";
+        TextBar.SetActive(true);
     }
 
 }
