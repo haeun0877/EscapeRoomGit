@@ -10,15 +10,16 @@ public class ItemWindowScript : MonoBehaviour
     [SerializeField] Button escButton;
     [SerializeField] GameObject ItemButton;
     Image[] item;
+    Image[] frame;
     int itemNum;
     Sprite[] sprites;
-
     ObtainImage itemImage;
 
     void Start()
     {
         anim = GetComponent<Animation>();
         item = new Image[5];
+        frame = new Image[5];
         itemNum = 0;
 
         itemImage = FindObjectOfType<ObtainImage>();
@@ -49,6 +50,8 @@ public class ItemWindowScript : MonoBehaviour
         {
             if (image != null)
             {
+                instantiateFrame(itemNum, image[3]);
+
                 if (imageName == "book")
                 {
                     instantiateItem(itemNum, image[0]);
@@ -61,8 +64,6 @@ public class ItemWindowScript : MonoBehaviour
                 {
                     instantiateItem(itemNum, image[2]);
                 }
-                instantiateItem(itemNum, image[3]);
-                item[itemNum].transform.localScale = new Vector3(0.3f, 1.5f, 0.2f);
             }
         }
 
@@ -78,8 +79,15 @@ public class ItemWindowScript : MonoBehaviour
 
     void instantiateItem(int itemNum, Image image)
     {
-        item[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 130f), 25f, 0), Quaternion.identity);
-        item[itemNum].transform.SetParent(this.transform, false);
-        item[itemNum].transform.localScale = new Vector3(0.2f, 0.8f, 0.2f);
+        item[itemNum] = Instantiate(image, new Vector3(0, -2f, 0), Quaternion.identity);
+        item[itemNum].transform.SetParent(frame[itemNum].transform, false);
+        item[itemNum].transform.localScale = new Vector3(0.6f, 0.6f, 0.2f);
+    }
+
+    void instantiateFrame(int itemNum, Image image)
+    {
+        frame[itemNum] = Instantiate(image, new Vector3(-400f + (itemNum * 130f), 0, 0), Quaternion.identity);
+        frame[itemNum].transform.SetParent(this.transform, false);
+        frame[itemNum].transform.localScale = new Vector3(0.3f, 1.4f, 0.2f);
     }
 }

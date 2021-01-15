@@ -19,6 +19,10 @@ public class InteractionController : MonoBehaviour
 
     [SerializeField] GameObject panel;
 
+    [SerializeField] GameObject choice;
+    [SerializeField] Button yes;
+    [SerializeField] Button no;
+
     RaycastHit hitInfo;
     ItemScript itemBar;
 
@@ -86,6 +90,7 @@ public class InteractionController : MonoBehaviour
             {
                 moveScript.click = false;
                 Obtain.SetActive(false);
+                choice.SetActive(false);
                 TextBar.SetActive(false);
                 interacting = false;
                 hitInfo.collider.gameObject.SetActive(false);
@@ -147,6 +152,7 @@ public class InteractionController : MonoBehaviour
                 itemWindow.StartCoroutine("obtainItem", image);
                 hitInfo.collider.gameObject.SetActive(false);
                 panel.SetActive(false);
+                choice.SetActive(false);
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
@@ -154,6 +160,7 @@ public class InteractionController : MonoBehaviour
                 TextBar.SetActive(false);
                 interacting = false;
                 panel.SetActive(false);
+                choice.SetActive(false);
             }
         }  
     }
@@ -169,6 +176,7 @@ public class InteractionController : MonoBehaviour
             TextBar.SetActive(true);
             ObtainText.text = name;
             panel.SetActive(true);
+            choice.SetActive(false);
         }
     }
 
@@ -183,13 +191,23 @@ public class InteractionController : MonoBehaviour
         }
     }
 
-    public void obtainvisual()
+    public void obtainvisual(string name, int imageNum)
     {
         Obtain.SetActive(true);
-        TextBar.SetActive(true);
+        ObtainImage.sprite = sprites[imageNum];
+        ObtainText.text = name;
         panel.SetActive(true);
-        text.text = "아이템을 사용하시겠습니까?";
-        TextBar.SetActive(true);
+        choice.SetActive(true);
+        no.onClick.AddListener(ClickNo);
     }
 
+    void ClickNo()
+    {
+        Obtain.SetActive(false);
+        TextBar.SetActive(false);
+        interacting = false;
+        panel.SetActive(false);
+        choice.SetActive(false);
+        itemWindow.deleteAnim();
+    }
 }
