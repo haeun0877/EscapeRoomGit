@@ -28,6 +28,9 @@ public class InteractionController : MonoBehaviour
 
     ItemWindowScript itemWindow;
     MoveScript moveScript;
+    ObtainImage obtainClass;
+
+    GameObject nowGameObject;
 
     Sprite[] sprites;
 
@@ -41,6 +44,7 @@ public class InteractionController : MonoBehaviour
         click = false;
         itemWindow = FindObjectOfType<ItemWindowScript>();
         moveScript = FindObjectOfType<MoveScript>();
+        obtainClass = FindObjectOfType<ObtainImage>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
 
@@ -191,7 +195,7 @@ public class InteractionController : MonoBehaviour
         }
     }
 
-    public void obtainvisual(string name, int imageNum)
+    public void obtainvisual(string name, int imageNum, GameObject gameobject)
     {
         Obtain.SetActive(true);
         ObtainImage.sprite = sprites[imageNum];
@@ -199,6 +203,8 @@ public class InteractionController : MonoBehaviour
         panel.SetActive(true);
         choice.SetActive(true);
         no.onClick.AddListener(ClickNo);
+        Debug.Log(gameObject.name);
+        //nowGameObject = gameObject;
     }
 
     void ClickNo()
@@ -209,5 +215,6 @@ public class InteractionController : MonoBehaviour
         panel.SetActive(false);
         choice.SetActive(false);
         itemWindow.deleteAnim();
+        //nowGameObject.transform.parent.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
     }
 }
