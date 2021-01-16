@@ -225,8 +225,6 @@ public class InteractionController : MonoBehaviour
 
     void ClickNo()
     {
-        itemUsing = false;
-
         Obtain.SetActive(false);
         TextBar.SetActive(false);
         interacting = false;
@@ -234,6 +232,13 @@ public class InteractionController : MonoBehaviour
         choice.SetActive(false);
         itemWindow.deleteAnim();
         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+
+        if (itemUsing)
+        {
+            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        itemUsing = false;
     }
 
     void ClickYes()
@@ -241,9 +246,12 @@ public class InteractionController : MonoBehaviour
         if (itemUsing)
         {
             Debug.Log("아이템 사용중");
+            ClickNo();
+            itemUsing = true;
         }
         else
         {
+            itemUsing = true;
             Obtain.SetActive(false);
             TextBar.SetActive(false);
             interacting = false;
