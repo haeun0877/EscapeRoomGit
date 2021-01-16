@@ -36,17 +36,21 @@ public class InteractionController : MonoBehaviour
 
     bool interacting;
     bool click;
+    bool itemUsing;
 
     private void Start()
     {
-        itemBar = FindObjectOfType<ItemScript>();
         interacting = false;
         click = false;
+        itemUsing = false;
+
+        itemBar = FindObjectOfType<ItemScript>();
         itemWindow = FindObjectOfType<ItemWindowScript>();
         moveScript = FindObjectOfType<MoveScript>();
         obtainClass = FindObjectOfType<ObtainImage>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
+
 
         Cursor.visible = false;
     }
@@ -181,6 +185,7 @@ public class InteractionController : MonoBehaviour
             ObtainText.text = name;
             panel.SetActive(true);
             choice.SetActive(false);
+
         }
     }
 
@@ -195,7 +200,7 @@ public class InteractionController : MonoBehaviour
         }
     }
 
-    public void obtainvisual(string name, int imageNum, GameObject gameobject)
+    public void obtainvisual(string name, int imageNum, string cloneName)
     {
         Obtain.SetActive(true);
         ObtainImage.sprite = sprites[imageNum];
@@ -203,18 +208,48 @@ public class InteractionController : MonoBehaviour
         panel.SetActive(true);
         choice.SetActive(true);
         no.onClick.AddListener(ClickNo);
-        Debug.Log(gameObject.name);
-        //nowGameObject = gameObject;
+        yes.onClick.AddListener(ClickYes);
+
+        //nowGameObject는 현재 클릭된 게임오브젝트의 frame을 찾기위해 만들어짐
+        nowGameObject = GameObject.Find("UI");
+        nowGameObject = nowGameObject.transform.GetChild(1).gameObject;
+        
+        for(int i =2; i<nowGameObject.transform.childCount; i++)
+        {
+            if (nowGameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.name == cloneName)
+            {
+                nowGameObject = nowGameObject.transform.GetChild(i).gameObject;
+            }
+        }
     }
 
     void ClickNo()
     {
+        itemUsing = false;
+
         Obtain.SetActive(false);
         TextBar.SetActive(false);
         interacting = false;
         panel.SetActive(false);
         choice.SetActive(false);
         itemWindow.deleteAnim();
-        //nowGameObject.transform.parent.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+        nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+    }
+
+    void ClickYes()
+    {
+        if (itemUsing)
+        {
+            Debug.Log("아이템 사용중");
+        }
+        else
+        {
+            Obtain.SetActive(false);
+            TextBar.SetActive(false);
+            interacting = false;
+            panel.SetActive(false);
+            choice.SetActive(false);
+            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 }
