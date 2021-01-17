@@ -26,9 +26,14 @@ public class ItemWindowScript : MonoBehaviour
         sprites = Resources.LoadAll<Sprite>("Item");
     }
 
+    
     private void Update()
     {
         escButton.onClick.AddListener(deleteAnim);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            deleteAnim();
+        }
     }
 
     public void showAnim()
