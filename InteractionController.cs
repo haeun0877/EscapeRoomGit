@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -232,32 +232,50 @@ public class InteractionController : MonoBehaviour
         choice.SetActive(false);
         itemWindow.deleteAnim();
         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-
-        if (itemUsing)
-        {
-            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        }
-
-        itemUsing = false;
+        nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        
     }
 
     void ClickYes()
     {
-        if (itemUsing)
+        checkUsing();
+
+        if (!itemUsing)
         {
-            Debug.Log("아이템 사용중");
-            ClickNo();
-            itemUsing = true;
-        }
-        else
-        {
-            itemUsing = true;
             Obtain.SetActive(false);
             TextBar.SetActive(false);
             interacting = false;
             panel.SetActive(false);
             choice.SetActive(false);
             nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            nowGameObject.transform.parent.GetComponent<Image>().color = new Color(171 / 255f, 70 / 255f, 8 / 255f);
+
         }
+        else
+        {
+            ClickNo();
+        }
+    }
+
+    void checkUsing()
+    {
+        GameObject gameObject = GameObject.Find("UI").transform.GetChild(1).gameObject;
+        int num = 0;
+
+        for (int i =2; i<gameObject.transform.childCount; i++)
+        {
+            if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+            {
+                itemUsing = true;
+                num += 1;
+            }
+        }
+
+        if (num == 0)
+        {
+            itemUsing = false;
+        }
+
+        Debug.Log(itemUsing);
     }
 }
