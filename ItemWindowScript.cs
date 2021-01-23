@@ -26,7 +26,6 @@ public class ItemWindowScript : MonoBehaviour
         sprites = Resources.LoadAll<Sprite>("Item");
     }
 
-    
     private void Update()
     {
         escButton.onClick.AddListener(deleteAnim);

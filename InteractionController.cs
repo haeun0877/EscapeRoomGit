@@ -82,15 +82,9 @@ public class InteractionController : MonoBehaviour
 
     void Contact()
     {
-        if (hitInfo.transform.CompareTag("cabinet"))
+        if (hitInfo.transform.CompareTag("box"))
         {
-            justThingGuide("열쇠가 필요합니다");
-
-        }
-        else if (hitInfo.transform.CompareTag("box"))
-        {
-            go_InteractiveCrosshair.SetActive(true);
-            go_NomalCrosshair.SetActive(false);
+            crosshairInter();
             if (Input.GetMouseButtonDown(0))
             {
                 moveScript.click = true;// 캐릭터의 시선 움직임을 고정시킴
@@ -116,20 +110,21 @@ public class InteractionController : MonoBehaviour
         }
         else if (hitInfo.transform.CompareTag("picture"))
         {
-            justThingGuide("그림입니다");
+            crosshairInter();
+
+            if (Input.GetMouseButtonDown(0))
+                justThingGuide("그림입니다");
         }
         else if (hitInfo.transform.CompareTag("interacte"))
         {
-            go_InteractiveCrosshair.SetActive(true);
-            go_NomalCrosshair.SetActive(false);
+            crosshairInter();
 
             obtainItemGuide("책", 0);
             inputKey("book");
         }
         else if (hitInfo.transform.CompareTag("silverkey"))
         {
-            go_InteractiveCrosshair.SetActive(true);
-            go_NomalCrosshair.SetActive(false);
+            crosshairInter();
 
             obtainItemGuide("은색키", 2);
             inputKey("silverKey");
@@ -138,6 +133,12 @@ public class InteractionController : MonoBehaviour
         {
             NotContact();
         }
+    }
+
+    public void crosshairInter()
+    {
+        go_InteractiveCrosshair.SetActive(true);
+        go_NomalCrosshair.SetActive(false);
     }
 
     void NotContact()
@@ -194,15 +195,11 @@ public class InteractionController : MonoBehaviour
         }
     }
 
-    void justThingGuide(string bartext)
+    public void justThingGuide(string bartext)
     {
-        go_InteractiveCrosshair.SetActive(true);
-        go_NomalCrosshair.SetActive(false);
-        if (Input.GetMouseButtonDown(0))
-        {
-            text.text = bartext;
-            TextBar.SetActive(true);
-        }
+        Debug.Log("?");
+        text.text = bartext;
+        TextBar.SetActive(true);
     }
 
     public void obtainvisual(string name, int imageNum, string cloneName)

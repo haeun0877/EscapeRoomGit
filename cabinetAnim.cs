@@ -6,11 +6,14 @@ public class cabinetAnim : MonoBehaviour
 {
     [SerializeField] Camera cam;
     RaycastHit hitInfo;
+
+    InteractionController interController;
     int num;
 
     // Start is called before the first frame update
     void Start()
     {
+        interController = FindObjectOfType<InteractionController>();
         cam = Camera.main;
         num = 0;
     }
@@ -38,21 +41,30 @@ public class cabinetAnim : MonoBehaviour
 
     void Contact()
     {
+        interController.crosshairInter();
         if (hitInfo.transform.gameObject == this.gameObject)
         {
             if (Input.GetMouseButtonDown(0))
-                startAnim();
+            {
+                if (this.gameObject.tag != "cabinet")
+                {
+                    startAnim();
+                }
+                else
+                {
+                    interController.justThingGuide("열쇠가 필요합니다");
+                }
+            }
         }
     }
 
     public void startAnim()
     {
         num += 1;
-        Debug.Log(this.gameObject.tag + "open");
 
         if (num % 2 == 1)
         {
-            this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"oepn");
+            this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"open");
         }
         else
         {
