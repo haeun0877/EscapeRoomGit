@@ -29,6 +29,10 @@ public class ItemWindowScript : MonoBehaviour
     private void Update()
     {
         escButton.onClick.AddListener(deleteAnim);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            deleteAnim();
+        }
     }
 
     public void showAnim()
@@ -81,7 +85,7 @@ public class ItemWindowScript : MonoBehaviour
     {
         item[itemNum] = Instantiate(image, new Vector3(0, -2f, 0), Quaternion.identity);
         item[itemNum].transform.SetParent(frame[itemNum].transform, false);
-        item[itemNum].transform.localScale = new Vector3(0.6f, 0.6f, 0.2f);
+        item[itemNum].GetComponent<Animator>().SetTrigger("Spawn");
     }
 
     void instantiateFrame(int itemNum, Image image)
@@ -90,4 +94,5 @@ public class ItemWindowScript : MonoBehaviour
         frame[itemNum].transform.SetParent(this.transform, false);
         frame[itemNum].transform.localScale = new Vector3(0.3f, 1.4f, 0.2f);
     }
+
 }

@@ -23,12 +23,15 @@ public class InteractionController : MonoBehaviour
     [SerializeField] Button yes;
     [SerializeField] Button no;
 
+    [SerializeField] GameObject textUsing;
+
     RaycastHit hitInfo;
     ItemScript itemBar;
 
     ItemWindowScript itemWindow;
     MoveScript moveScript;
     ObtainImage obtainClass;
+    cabinetAnim cabinet;
 
     GameObject nowGameObject;
 
@@ -48,6 +51,7 @@ public class InteractionController : MonoBehaviour
         itemWindow = FindObjectOfType<ItemWindowScript>();
         moveScript = FindObjectOfType<MoveScript>();
         obtainClass = FindObjectOfType<ObtainImage>();
+        cabinet = FindObjectOfType<cabinetAnim>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
 
@@ -81,7 +85,7 @@ public class InteractionController : MonoBehaviour
         if (hitInfo.transform.CompareTag("cabinet"))
         {
             justThingGuide("열쇠가 필요합니다");
-            
+
         }
         else if (hitInfo.transform.CompareTag("box"))
         {
@@ -149,6 +153,7 @@ public class InteractionController : MonoBehaviour
 
     void inputKey(string image)
     {
+        moveScript.click = false;
         if (interacting)
         {
             if (Input.GetKeyDown(KeyCode.Y))
@@ -185,7 +190,7 @@ public class InteractionController : MonoBehaviour
             ObtainText.text = name;
             panel.SetActive(true);
             choice.SetActive(false);
-
+            moveScript.click = true;
         }
     }
 
@@ -223,8 +228,35 @@ public class InteractionController : MonoBehaviour
         }
     }
 
+    void ClickYes()
+    {
+        checkUsing();
+
+        moveScript.click = false;
+
+        if (itemUsing)
+        {
+            textUsing.SetActive(true);
+            StartCoroutine("showUsingText");
+
+        }
+        else
+        {
+            Obtain.SetActive(false);
+            TextBar.SetActive(false);
+            interacting = false;
+            panel.SetActive(false);
+            choice.SetActive(false);
+            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            nowGameObject.transform.parent.GetComponent<Image>().color = new Color(171 / 255f, 70 / 255f, 8 / 255f);
+        }
+
+    }
+
     void ClickNo()
     {
+        moveScript.click = false;
+
         Obtain.SetActive(false);
         TextBar.SetActive(false);
         interacting = false;
@@ -232,32 +264,36 @@ public class InteractionController : MonoBehaviour
         choice.SetActive(false);
         itemWindow.deleteAnim();
         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+        nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        
+    }
+  
 
-        if (itemUsing)
+    void checkUsing()
+    {
+        GameObject gameObject = GameObject.Find("UI").transform.GetChild(1).gameObject;
+        int num = 0;
+
+        for (int i =2; i<gameObject.transform.childCount; i++)
         {
-            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+            {             
+                num += 1;
+            }
         }
 
-        itemUsing = false;
+        if (num == 0)
+        {
+            itemUsing = false;
+        }else
+        {
+            itemUsing = true;
+        }
     }
 
-    void ClickYes()
+    IEnumerator showUsingText()
     {
-        if (itemUsing)
-        {
-            Debug.Log("아이템 사용중");
-            ClickNo();
-            itemUsing = true;
-        }
-        else
-        {
-            itemUsing = true;
-            Obtain.SetActive(false);
-            TextBar.SetActive(false);
-            interacting = false;
-            panel.SetActive(false);
-            choice.SetActive(false);
-            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        }
+        yield return new WaitForSeconds(1F);
+        textUsing.SetActive(false);
     }
 }
