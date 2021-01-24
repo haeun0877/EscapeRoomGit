@@ -24,6 +24,7 @@ public class InteractionController : MonoBehaviour
     [SerializeField] Button no;
 
     [SerializeField] GameObject textUsing;
+    [SerializeField] GameObject textSuccess;
 
     RaycastHit hitInfo;
     ItemScript itemBar;
@@ -136,21 +137,30 @@ public class InteractionController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                checkUsing();
-                if (itemUsing) // 실버키가 사용중이고 캐비닛이 선택되었다면 캐비닛 문을 여는 애니메이션 실행
+                if (hitInfo.transform.localPosition.z < -45)
                 {
-                    if (gameObject.transform.name == "silverKey(Clone)")
+                    hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetclose");
+                }
+                else
+                {
+                    checkUsing();
+                    if (itemUsing) // 실버키가 사용중이고 캐비닛이 선택되었다면 캐비닛 문을 여는 애니메이션 실행
                     {
-                        hitInfo.transform.GetComponent<Animator>().SetTrigger(hitInfo.transform.gameObject.tag + "open");
+                        if (gameObject.transform.name == "silverKey(Clone)")
+                        {
+                            hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
+                            StartCoroutine("showUsingSuccessT");
+                            ClickNo();
+                        }
+                        else
+                        {
+                            justThingGuide("열쇠가 필요합니다.");
+                        }
                     }
                     else
                     {
                         justThingGuide("열쇠가 필요합니다.");
                     }
-                }
-                else
-                {
-                    justThingGuide("열쇠가 필요합니다.");
                 }
             }
         }
@@ -257,7 +267,6 @@ public class InteractionController : MonoBehaviour
 
         if (itemUsing)
         {
-            textUsing.SetActive(true);
             StartCoroutine("showUsingText");
 
         }
@@ -285,8 +294,8 @@ public class InteractionController : MonoBehaviour
         choice.SetActive(false);
         itemWindow.deleteAnim();
         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-        nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        
+        if(nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
     }
   
 
@@ -316,7 +325,17 @@ public class InteractionController : MonoBehaviour
 
     IEnumerator showUsingText()
     {
-        yield return new WaitForSeconds(1F);
-        textUsing.SetActive(false);
+        textUsing.SetActive(true);
+        textUsing.gameObject.GetComponent<Animator>().SetTrigger("show");
+        yield return new WaitForSeconds(1.3F);
+        textUsing.gameObject.GetComponent<Animator>().SetTrigger("delete");
+    }
+
+    IEnumerator showUsingSuccessT()
+    {
+        textSuccess.SetActive(true);
+        textSuccess.gameObject.GetComponent<Animator>().SetTrigger("show");
+        yield return new WaitForSeconds(1.3F);
+        textSuccess.gameObject.GetComponent<Animator>().SetTrigger("delete");
     }
 }
