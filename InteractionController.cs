@@ -34,6 +34,7 @@ public class InteractionController : MonoBehaviour
     cabinetAnim cabinet;
 
     GameObject nowGameObject;
+    GameObject gameObject;
 
     Sprite[] sprites;
 
@@ -129,6 +130,30 @@ public class InteractionController : MonoBehaviour
             obtainItemGuide("은색키", 2);
             inputKey("silverKey");
         }
+        else if (hitInfo.transform.CompareTag("cabinet"))
+        {
+            crosshairInter();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                checkUsing();
+                if (itemUsing) // 실버키가 사용중이고 캐비닛이 선택되었다면 캐비닛 문을 여는 애니메이션 실행
+                {
+                    if (gameObject.transform.name == "silverKey(Clone)")
+                    {
+                        hitInfo.transform.GetComponent<Animator>().SetTrigger(hitInfo.transform.gameObject.tag + "open");
+                    }
+                    else
+                    {
+                        justThingGuide("열쇠가 필요합니다.");
+                    }
+                }
+                else
+                {
+                    justThingGuide("열쇠가 필요합니다.");
+                }
+            }
+        }
         else
         {
             NotContact();
@@ -149,7 +174,6 @@ public class InteractionController : MonoBehaviour
         {
             TextBar.SetActive(false);
         }
-        
     }
 
     void inputKey(string image)
@@ -197,9 +221,9 @@ public class InteractionController : MonoBehaviour
 
     public void justThingGuide(string bartext)
     {
-        Debug.Log("?");
         text.text = bartext;
         TextBar.SetActive(true);
+
     }
 
     public void obtainvisual(string name, int imageNum, string cloneName)
@@ -268,7 +292,7 @@ public class InteractionController : MonoBehaviour
 
     void checkUsing()
     {
-        GameObject gameObject = GameObject.Find("UI").transform.GetChild(1).gameObject;
+        gameObject = GameObject.Find("UI").transform.GetChild(1).gameObject;
         int num = 0;
 
         for (int i =2; i<gameObject.transform.childCount; i++)
@@ -276,6 +300,8 @@ public class InteractionController : MonoBehaviour
             if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
             {             
                 num += 1;
+                gameObject = gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject;
+                break;
             }
         }
 

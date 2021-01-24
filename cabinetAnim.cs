@@ -9,6 +9,7 @@ public class cabinetAnim : MonoBehaviour
 
     InteractionController interController;
     int num;
+    bool click;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +17,7 @@ public class cabinetAnim : MonoBehaviour
         interController = FindObjectOfType<InteractionController>();
         cam = Camera.main;
         num = 0;
+        click = false;
     }
 
     // Update is called once per frame
@@ -49,10 +51,7 @@ public class cabinetAnim : MonoBehaviour
                 if (this.gameObject.tag != "cabinet")
                 {
                     startAnim();
-                }
-                else
-                {
-                    interController.justThingGuide("열쇠가 필요합니다");
+
                 }
             }
         }
@@ -60,8 +59,8 @@ public class cabinetAnim : MonoBehaviour
 
     public void startAnim()
     {
-        num += 1;
-
+         num += 1;
+         
         if (num % 2 == 1)
         {
             this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"open");
