@@ -26,6 +26,8 @@ public class InteractionController : MonoBehaviour
     [SerializeField] GameObject textUsing;
     [SerializeField] GameObject textSuccess;
 
+    [SerializeField] GameObject picture;
+
     RaycastHit hitInfo;
     ItemScript itemBar;
 
@@ -43,11 +45,18 @@ public class InteractionController : MonoBehaviour
     bool click;
     bool itemUsing;
 
+    int screwNum;
+
     private void Start()
     {
         interacting = false;
         click = false;
         itemUsing = false;
+
+        screwNum = 0;
+
+        no.onClick.AddListener(ClickNo);
+        yes.onClick.AddListener(ClickYes);
 
         itemBar = FindObjectOfType<ItemScript>();
         itemWindow = FindObjectOfType<ItemWindowScript>();
@@ -56,7 +65,6 @@ public class InteractionController : MonoBehaviour
         cabinet = FindObjectOfType<cabinetAnim>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
-
 
         Cursor.visible = false;
     }
@@ -92,7 +100,7 @@ public class InteractionController : MonoBehaviour
                 moveScript.click = true;// 캐릭터의 시선 움직임을 고정시킴
                 text.text = "박스를 치우시겠습니까? (y/n)";
                 TextBar.SetActive(true);
-                click = true; 
+                click = true;
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
@@ -128,7 +136,7 @@ public class InteractionController : MonoBehaviour
         {
             crosshairInter();
 
-            obtainItemGuide("은색키", 2);
+            obtainItemGuide("은색키", 3);
             inputKey("silverKey");
         }
         else if (hitInfo.transform.CompareTag("cabinet"))
@@ -150,7 +158,11 @@ public class InteractionController : MonoBehaviour
                         {
                             hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
                             StartCoroutine("showUsingSuccessT");
-                            ClickNo();
+
+                            itemWindow.deleteAnim();
+                            nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                            if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                                nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
                         }
                         else
                         {
@@ -161,6 +173,43 @@ public class InteractionController : MonoBehaviour
                     {
                         justThingGuide("열쇠가 필요합니다.");
                     }
+                }
+            }
+        }
+        else if (hitInfo.transform.CompareTag("pliers"))
+        {
+            crosshairInter();
+
+            obtainItemGuide("드라이버", 2);
+            inputKey("pliers");
+        }
+        else if (hitInfo.transform.CompareTag("screw"))
+        {
+            crosshairInter();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                checkUsing();
+                if (itemUsing) 
+                {
+                    if (gameObject.transform.name == "plier(Clone)")
+                    {
+                        screwNum += 1;
+
+                        hitInfo.transform.gameObject.SetActive(false);
+
+                        StartCoroutine("showUsingSuccessT");
+
+                        itemWindow.deleteAnim();
+                        nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                        if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                    }
+                }
+
+                if (screwNum >= 2)
+                {
+                    picture.transform.GetComponent<Animator>().SetTrigger("fall");
                 }
             }
         }
@@ -243,8 +292,6 @@ public class InteractionController : MonoBehaviour
         ObtainText.text = name;
         panel.SetActive(true);
         choice.SetActive(true);
-        no.onClick.AddListener(ClickNo);
-        yes.onClick.AddListener(ClickYes);
 
         //nowGameObject는 현재 클릭된 게임오브젝트의 frame을 찾기위해 만들어짐
         nowGameObject = GameObject.Find("UI");
@@ -317,7 +364,8 @@ public class InteractionController : MonoBehaviour
         if (num == 0)
         {
             itemUsing = false;
-        }else
+        }
+        else
         {
             itemUsing = true;
         }

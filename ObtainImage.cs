@@ -28,10 +28,14 @@ public class ObtainImage : MonoBehaviour, IPointerClickHandler
             }
             if (this.gameObject.name == "silverKey(Clone)")
             {
-                controller.obtainvisual("은색키", 2, "silverKey(Clone)");
+                controller.obtainvisual("은색키", 3, "silverKey(Clone)");
                 this.gameObject.transform.parent.GetComponent<Image>().color = new Color(170 / 255f, 70 / 255f, 8 / 255f);
             }
-
+            if (this.gameObject.name == "plier(Clone)")
+            {
+                controller.obtainvisual("드라이버", 2, "plier(Clone)");
+                this.gameObject.transform.parent.GetComponent<Image>().color = new Color(170 / 255f, 70 / 255f, 8 / 255f);
+            }
         }
     }
 

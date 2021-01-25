@@ -68,6 +68,10 @@ public class ItemWindowScript : MonoBehaviour
                 {
                     instantiateItem(itemNum, image[2]);
                 }
+                if (imageName == "pliers")
+                {
+                    instantiateItem(itemNum, image[4]);
+                }
             }
         }
 
