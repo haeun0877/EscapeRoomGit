@@ -123,7 +123,7 @@ public class ItemWindowScript : MonoBehaviour
                 num[i] = Instantiate(number, new Vector3(0, -2f, 0), Quaternion.identity);
                 num[i].transform.SetParent(item[i].transform, false);
                 num[i].transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
-                num[i].transform.localPosition = new Vector3(100f, -100f, 0);
+                num[i].transform.localPosition = new Vector3(200f, -200f, 0);
 
                 stop = true;
             }

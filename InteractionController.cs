@@ -27,6 +27,7 @@ public class InteractionController : MonoBehaviour
     [SerializeField] GameObject textSuccess;
 
     [SerializeField] GameObject picture;
+    [SerializeField] GameObject bookcase;
 
     RaycastHit hitInfo;
     ItemScript itemBar;
@@ -216,6 +217,28 @@ public class InteractionController : MonoBehaviour
                     picture.transform.GetComponent<Animator>().SetTrigger("fall");
                 }
             }
+        }
+        else if (hitInfo.transform.CompareTag("book"))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                checkUsing();
+                if (itemUsing)
+                {
+                    if (gameObject.transform.name == "book(Clone)")
+                    {
+                        StartCoroutine("showUsingSuccessT");
+                        bookcase.transform.GetComponent<Animator>().SetTrigger("open");
+
+                        itemWindow.deleteAnim();
+                        nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                        if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
+                    }
+                }
+            }
+                
         }
         else
         {
