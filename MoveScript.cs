@@ -11,21 +11,11 @@ public class MoveScript : MonoBehaviour
     float mouseX;
     float mouseY;
 
-    public bool click;
-
-    private void Start()
-    {
-        click = false;
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (!click)
-        {
-            positionMoving();
-            rotationMoving();
-        }
+        positionMoving();
+        rotationMoving();
     }
 
     void rotationMoving()

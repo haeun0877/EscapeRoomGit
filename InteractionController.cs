@@ -97,14 +97,12 @@ public class InteractionController : MonoBehaviour
             crosshairInter();
             if (Input.GetMouseButtonDown(0))
             {
-                moveScript.click = true;// 캐릭터의 시선 움직임을 고정시킴
                 text.text = "박스를 치우시겠습니까? (y/n)";
                 TextBar.SetActive(true);
                 click = true;
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
-                moveScript.click = false;
                 Obtain.SetActive(false);
                 choice.SetActive(false);
                 TextBar.SetActive(false);
@@ -113,7 +111,6 @@ public class InteractionController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
-                moveScript.click = false;
                 interacting = false;
             }
 
@@ -138,6 +135,13 @@ public class InteractionController : MonoBehaviour
 
             obtainItemGuide("은색키", 3);
             inputKey("silverKey");
+        }
+        else if (hitInfo.transform.CompareTag("goldkey"))
+        {
+            crosshairInter();
+
+            obtainItemGuide("골드키", 1);
+            inputKey("goldKey");
         }
         else if (hitInfo.transform.CompareTag("cabinet"))
         {
@@ -197,13 +201,13 @@ public class InteractionController : MonoBehaviour
                         screwNum += 1;
 
                         hitInfo.transform.gameObject.SetActive(false);
-
                         StartCoroutine("showUsingSuccessT");
-
+                        
                         itemWindow.deleteAnim();
                         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
                         if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
                             nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                        
                     }
                 }
 
@@ -237,7 +241,6 @@ public class InteractionController : MonoBehaviour
 
     void inputKey(string image)
     {
-        moveScript.click = false;
         if (interacting)
         {
             if (Input.GetKeyDown(KeyCode.Y))
@@ -274,7 +277,6 @@ public class InteractionController : MonoBehaviour
             ObtainText.text = name;
             panel.SetActive(true);
             choice.SetActive(false);
-            moveScript.click = true;
         }
     }
 
@@ -310,8 +312,6 @@ public class InteractionController : MonoBehaviour
     {
         checkUsing();
 
-        moveScript.click = false;
-
         if (itemUsing)
         {
             StartCoroutine("showUsingText");
@@ -332,8 +332,6 @@ public class InteractionController : MonoBehaviour
 
     void ClickNo()
     {
-        moveScript.click = false;
-
         Obtain.SetActive(false);
         TextBar.SetActive(false);
         interacting = false;
@@ -377,6 +375,8 @@ public class InteractionController : MonoBehaviour
         textUsing.gameObject.GetComponent<Animator>().SetTrigger("show");
         yield return new WaitForSeconds(1.3F);
         textUsing.gameObject.GetComponent<Animator>().SetTrigger("delete");
+        yield return new WaitForSeconds(1.3F);
+        textUsing.SetActive(false);
     }
 
     IEnumerator showUsingSuccessT()
@@ -385,5 +385,7 @@ public class InteractionController : MonoBehaviour
         textSuccess.gameObject.GetComponent<Animator>().SetTrigger("show");
         yield return new WaitForSeconds(1.3F);
         textSuccess.gameObject.GetComponent<Animator>().SetTrigger("delete");
+        yield return new WaitForSeconds(1.3F);
+        textSuccess.SetActive(false);
     }
 }
