@@ -28,6 +28,7 @@ public class InteractionController : MonoBehaviour
 
     [SerializeField] GameObject picture;
     [SerializeField] GameObject bookcase;
+    [SerializeField] GameObject tower;
 
     RaycastHit hitInfo;
     ItemScript itemBar;
@@ -201,20 +202,20 @@ public class InteractionController : MonoBehaviour
                     {
                         screwNum += 1;
 
-                        hitInfo.transform.gameObject.SetActive(false);
+                        hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
                         StartCoroutine("showUsingSuccessT");
-                        
-                        itemWindow.deleteAnim();
-                        nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-                        if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
-                            nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
                         
                     }
                 }
 
                 if (screwNum >= 2)
                 {
-                    picture.transform.GetComponent<Animator>().SetTrigger("fall");
+                    StartCoroutine("waitaMinute");
+
+                    itemWindow.deleteAnim();
+                    nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                    if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                        nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }
@@ -234,11 +235,32 @@ public class InteractionController : MonoBehaviour
                         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
                         if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
                             nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-
                     }
                 }
             }
                 
+        }
+        else if (hitInfo.transform.CompareTag("right"))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                tower.transform.GetComponent<Animator>().SetTrigger("open");
+            }
+        }
+        else if (hitInfo.transform.CompareTag("button"))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+            }
+        }
+        else if (hitInfo.transform.CompareTag("InputKey"))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                justThingGuide("골드키가 필요합니다");
+            }
         }
         else
         {
@@ -411,4 +433,11 @@ public class InteractionController : MonoBehaviour
         yield return new WaitForSeconds(1.3F);
         textSuccess.SetActive(false);
     }
+
+    IEnumerator waitaMinute()
+    {
+        yield return new WaitForSeconds(1.3F);
+        picture.transform.GetComponent<Animator>().SetTrigger("fall");
+    }
+
 }

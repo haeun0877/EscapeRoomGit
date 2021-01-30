@@ -124,6 +124,7 @@ public class ItemWindowScript : MonoBehaviour
                 num[i].transform.SetParent(item[i].transform, false);
                 num[i].transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
                 num[i].transform.localPosition = new Vector3(200f, -200f, 0);
+                num[i].transform.GetComponent<Animator>().SetTrigger("Spawn");
 
                 stop = true;
             }
