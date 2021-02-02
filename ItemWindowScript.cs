@@ -14,10 +14,12 @@ public class ItemWindowScript : MonoBehaviour
     Image[] frame;
     GameObject[] num;
     int itemNum;
+    int o;
     Sprite[] sprites;
     ObtainImage itemImage;
 
     bool stop;
+    bool leftMove;
 
     void Start()
     {
@@ -26,6 +28,8 @@ public class ItemWindowScript : MonoBehaviour
         frame = new Image[5];
         num = new GameObject[5];
         itemNum = 0;
+        leftMove = false;
+        o = 0;
 
         itemImage = FindObjectOfType<ObtainImage>();
         sprites = Resources.LoadAll<Sprite>("Item");
@@ -38,6 +42,9 @@ public class ItemWindowScript : MonoBehaviour
         {
             deleteAnim();
         }
+
+        if (leftMove)
+            itemMoveLeft();
     }
 
     public void showAnim()
@@ -74,6 +81,10 @@ public class ItemWindowScript : MonoBehaviour
                 if (imageName == "pliers")
                 {
                     instantiateItem(itemNum, image[4], "pliers");
+                }
+                if(imageName == "crystal")
+                {
+                    instantiateItem(itemNum, image[5], "crystal");
                 }
 
                 instantiateFrame(itemNum, image[3]);
@@ -129,6 +140,68 @@ public class ItemWindowScript : MonoBehaviour
                 stop = true;
             }
         }
+    }
+
+    public void destroyKey()
+    {
+        bool existKey = false;
+        int n;
+        GameObject findObject=GameObject.Find("UI").transform.GetChild(1).gameObject;
+
+        for (n=0; n<itemNum; n++)
+        {
+            if (num[n] != null)
+            {
+                existKey = true;
+                break;
+            }
+        }
+
+        if (existKey)
+        {
+            for (int i = 2; i < gameObject.transform.childCount; i++)
+            {
+                if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.childCount>1)
+                {
+                    findObject = gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (o = 2; o < gameObject.transform.childCount; o++)
+            {
+                if (gameObject.transform.GetChild(o).gameObject.transform.GetChild(0).gameObject.transform.name=="goldKey(Clone)")
+                {
+                    findObject = gameObject.transform.GetChild(o).gameObject;
+                    break;
+                }
+            }
+
+            if (o <= itemNum)
+            {
+                for (; o <= itemNum; o++)
+                {
+                    leftMove = true;
+                }
+            }
+        }
+        findObject.SetActive(false);
+
+    }
+
+    void itemMoveLeft()
+    {
+        /*
+        Vector3 origin = item[o - 2].transform.position;
+
+        item[o - 2].transform.position = Vector3.MoveTowards(item[o - 2].transform.position, item[o-2].transform.position- new Vector3(1,0,0),0.2f);
+        //frame[o - 2].transform.position = Vector3.MoveTowards(item[o - 2].transform.position, frame[o - 2].transform.position - new Vector3(-1, 0, 0), 0.1f);
+
+        if (item[o - 2].transform.position.x >= origin.x+1f)
+            leftMove = false;
+        */
     }
 
 }

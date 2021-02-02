@@ -46,6 +46,7 @@ public class InteractionController : MonoBehaviour
     bool interacting;
     bool click;
     bool itemUsing;
+    bool putKey;
 
     int screwNum;
 
@@ -54,6 +55,7 @@ public class InteractionController : MonoBehaviour
         interacting = false;
         click = false;
         itemUsing = false;
+        putKey = false;
 
         screwNum = 0;
 
@@ -135,15 +137,22 @@ public class InteractionController : MonoBehaviour
         {
             crosshairInter();
 
-            obtainItemGuide("은색키", 3);
+            obtainItemGuide("은색키", 4);
             inputKey("silverKey");
         }
         else if (hitInfo.transform.CompareTag("goldkey"))
         {
             crosshairInter();
 
-            obtainItemGuide("골드키", 1);
+            obtainItemGuide("골드키", 2);
             inputKey("goldKey");
+        }
+        else if (hitInfo.transform.CompareTag("crystal"))
+        {
+            crosshairInter();
+
+            obtainItemGuide("크리스탈", 1);
+            inputKey("crystal");
         }
         else if (hitInfo.transform.CompareTag("cabinet"))
         {
@@ -186,7 +195,7 @@ public class InteractionController : MonoBehaviour
         {
             crosshairInter();
 
-            obtainItemGuide("드라이버", 2);
+            obtainItemGuide("드라이버", 3);
             inputKey("pliers");
         }
         else if (hitInfo.transform.CompareTag("screw"))
@@ -244,22 +253,62 @@ public class InteractionController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
-                tower.transform.GetComponent<Animator>().SetTrigger("open");
+                if (putKey)
+                {
+                    hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                    tower.transform.GetComponent<Animator>().SetTrigger("open");
+                    putKey = false;
+                }
             }
         }
         else if (hitInfo.transform.CompareTag("button"))
         {
             if (Input.GetMouseButtonDown(0))
             {
-                hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                if (putKey)
+                {
+                    hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                    putKey = false;
+                }
             }
         }
         else if (hitInfo.transform.CompareTag("InputKey"))
         {
             if (Input.GetMouseButtonDown(0))
             {
-                justThingGuide("골드키가 필요합니다");
+                checkUsing();
+                if (itemUsing)
+                {
+                    if (gameObject.transform.name == "goldKey(Clone)")
+                    {
+                        StartCoroutine("showUsingSuccessT");
+                        itemWindow.destroyKey();
+                        putKey = true;
+                    }
+                }
+                else
+                {
+                    justThingGuide("골드키가 필요합니다");
+                }
+            }
+        }
+        else if (hitInfo.transform.CompareTag("final"))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                checkUsing();
+                if (itemUsing)
+                {
+                    if (gameObject.transform.name == "crystal(Clone)")
+                    {
+                        //탈출성공
+                        Debug.Log("escapeRoomFinish");
+                    }
+                }
+                else
+                {
+                    justThingGuide("보석을 찾아야합니다.");
+                }
             }
         }
         else
