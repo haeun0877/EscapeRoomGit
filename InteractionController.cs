@@ -296,14 +296,18 @@ public class InteractionController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                checkUsing();
-                if (itemUsing)
+                bool existC = false;
+                GameObject crystalG = GameObject.Find("UI");
+                crystalG = crystalG.transform.GetChild(1).gameObject;
+
+                for (int i = 2; i < crystalG.transform.childCount; i++)
                 {
-                    if (gameObject.transform.name == "crystal(Clone)")
-                    {
-                        //탈출성공
-                        Debug.Log("escapeRoomFinish");
-                    }
+                    if (crystalG.transform.GetChild(i).transform.GetChild(0).name == "crystal(Clone)")
+                        existC = true;
+                }
+                if (existC)
+                {
+                    Debug.Log("탈출성공");
                 }
                 else
                 {
@@ -445,11 +449,14 @@ public class InteractionController : MonoBehaviour
 
         for (int i =2; i<gameObject.transform.childCount; i++)
         {
-            if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
-            {             
-                num += 1;
-                gameObject = gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject;
-                break;
+            if (gameObject.transform.GetChild(i).gameObject.activeSelf)
+            {
+                if (gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                {
+                    num += 1;
+                    gameObject = gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).gameObject;
+                    break;
+                }
             }
         }
 

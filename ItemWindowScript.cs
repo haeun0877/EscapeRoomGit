@@ -42,9 +42,6 @@ public class ItemWindowScript : MonoBehaviour
         {
             deleteAnim();
         }
-
-        if (leftMove)
-            itemMoveLeft();
     }
 
     public void showAnim()
@@ -190,18 +187,4 @@ public class ItemWindowScript : MonoBehaviour
         findObject.SetActive(false);
 
     }
-
-    void itemMoveLeft()
-    {
-        /*
-        Vector3 origin = item[o - 2].transform.position;
-
-        item[o - 2].transform.position = Vector3.MoveTowards(item[o - 2].transform.position, item[o-2].transform.position- new Vector3(1,0,0),0.2f);
-        //frame[o - 2].transform.position = Vector3.MoveTowards(item[o - 2].transform.position, frame[o - 2].transform.position - new Vector3(-1, 0, 0), 0.1f);
-
-        if (item[o - 2].transform.position.x >= origin.x+1f)
-            leftMove = false;
-        */
-    }
-
 }
