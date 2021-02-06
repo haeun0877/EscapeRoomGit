@@ -19,7 +19,7 @@ public class ItemWindowScript : MonoBehaviour
     ObtainImage itemImage;
 
     bool stop;
-    bool leftMove;
+    bool destroyYes;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class ItemWindowScript : MonoBehaviour
         frame = new Image[5];
         num = new GameObject[5];
         itemNum = 0;
-        leftMove = false;
+        destroyYes = false;
         o = 0;
 
         itemImage = FindObjectOfType<ObtainImage>();
@@ -128,13 +128,16 @@ public class ItemWindowScript : MonoBehaviour
         {
             if (item[i].transform.name == name + "(Clone)")
             {
-                num[i] = Instantiate(number, new Vector3(0, -2f, 0), Quaternion.identity);
-                num[i].transform.SetParent(item[i].transform, false);
-                num[i].transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
-                num[i].transform.localPosition = new Vector3(200f, -200f, 0);
-                num[i].transform.GetComponent<Animator>().SetTrigger("Spawn");
-
-                stop = true;
+                if (!destroyYes)
+                {
+                    num[i] = Instantiate(number, new Vector3(0, -2f, 0), Quaternion.identity);
+                    num[i].transform.SetParent(item[i].transform, false);
+                    num[i].transform.localScale = new Vector3(0.5f, 0.3f, 0.5f);
+                    num[i].transform.localPosition = new Vector3(200f, -200f, 0);
+                    num[i].transform.GetComponent<Animator>().SetTrigger("Spawn");
+                    destroyYes = false;
+                    stop = true;
+                }
             }
         }
     }
@@ -149,8 +152,11 @@ public class ItemWindowScript : MonoBehaviour
         {
             if (num[n] != null)
             {
-                existKey = true;
-                break;
+                if (num[n].activeSelf)
+                {
+                    existKey = true;
+                    break;
+                }
             }
         }
 
@@ -172,15 +178,8 @@ public class ItemWindowScript : MonoBehaviour
                 if (gameObject.transform.GetChild(o).gameObject.transform.GetChild(0).gameObject.transform.name=="goldKey(Clone)")
                 {
                     findObject = gameObject.transform.GetChild(o).gameObject;
+                    destroyYes = true;
                     break;
-                }
-            }
-
-            if (o <= itemNum)
-            {
-                for (; o <= itemNum; o++)
-                {
-                    leftMove = true;
                 }
             }
         }

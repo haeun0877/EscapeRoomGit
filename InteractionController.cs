@@ -30,6 +30,9 @@ public class InteractionController : MonoBehaviour
     [SerializeField] GameObject bookcase;
     [SerializeField] GameObject tower;
 
+    [SerializeField] AudioClip[] audio;
+    AudioSource audioSource;
+
     RaycastHit hitInfo;
     ItemScript itemBar;
 
@@ -69,6 +72,8 @@ public class InteractionController : MonoBehaviour
         cabinet = FindObjectOfType<cabinetAnim>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
+
+        audioSource = GetComponent<AudioSource>();
 
         Cursor.visible = false;
     }
@@ -240,6 +245,9 @@ public class InteractionController : MonoBehaviour
                         StartCoroutine("showUsingSuccessT");
                         bookcase.transform.GetComponent<Animator>().SetTrigger("open");
 
+                        audioSource.clip = audio[0];
+                        audioSource.Play();
+
                         itemWindow.deleteAnim();
                         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
                         if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
@@ -284,6 +292,7 @@ public class InteractionController : MonoBehaviour
                         StartCoroutine("showUsingSuccessT");
                         itemWindow.destroyKey();
                         putKey = true;
+                        ClickNo();
                     }
                 }
                 else
@@ -375,6 +384,8 @@ public class InteractionController : MonoBehaviour
             ObtainText.text = name;
             panel.SetActive(true);
             choice.SetActive(false);
+
+            StartCoroutine("thunder");
         }
     }
 
@@ -496,4 +507,11 @@ public class InteractionController : MonoBehaviour
         picture.transform.GetComponent<Animator>().SetTrigger("fall");
     }
 
+    IEnumerator thunder()
+    {
+        yield return new WaitForSeconds(5F);
+        audioSource.clip = audio[2];
+        audioSource.Play();
+        yield return new WaitForSeconds(3F);
+    }
 }

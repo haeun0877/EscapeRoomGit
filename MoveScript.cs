@@ -11,12 +11,22 @@ public class MoveScript : MonoBehaviour
     float mouseX;
     float mouseY;
 
+    AudioSource walkSound;
+    Vector3 originPos;
+
+    private void Start()
+    {
+        walkSound = this.GetComponent<AudioSource>();
+        originPos = this.transform.position;
+    }
 
     // Update is called once per frame
     void Update()
     {
         positionMoving();
         rotationMoving();
+
+
     }
 
     void rotationMoving()
@@ -39,5 +49,15 @@ public class MoveScript : MonoBehaviour
         Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * moveSpeed;
 
         this.transform.position = this.transform.position + _velocity * Time.deltaTime;
+
+        if (_moveDirX != 0 || _moveDirY != 0)
+        {
+            if (!walkSound.isPlaying)
+                walkSound.Play();
+        }
+        else
+        {
+            walkSound.Stop();
+        }
     }
 }
