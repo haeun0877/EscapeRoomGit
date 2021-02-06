@@ -5,6 +5,8 @@ using UnityEngine;
 public class cabinetAnim : MonoBehaviour
 {
     [SerializeField] Camera cam;
+    [SerializeField] AudioClip[] audio;
+    AudioSource audioSource;
     RaycastHit hitInfo;
 
     InteractionController interController;
@@ -15,6 +17,7 @@ public class cabinetAnim : MonoBehaviour
     void Start()
     {
         interController = FindObjectOfType<InteractionController>();
+        audioSource = this.GetComponent<AudioSource>();
         cam = Camera.main;
         num = 0;
         click = false;
@@ -63,10 +66,14 @@ public class cabinetAnim : MonoBehaviour
          
         if (num % 2 == 1)
         {
+            audioSource.clip = audio[0];
+            audioSource.Play();
             this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"open");
         }
         else
         {
+            audioSource.clip = audio[1];
+            audioSource.Play();
             this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"close");
         }
     }

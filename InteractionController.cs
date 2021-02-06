@@ -39,7 +39,6 @@ public class InteractionController : MonoBehaviour
     ItemWindowScript itemWindow;
     MoveScript moveScript;
     ObtainImage obtainClass;
-    cabinetAnim cabinet;
 
     GameObject nowGameObject;
     GameObject gameObject;
@@ -69,7 +68,6 @@ public class InteractionController : MonoBehaviour
         itemWindow = FindObjectOfType<ItemWindowScript>();
         moveScript = FindObjectOfType<MoveScript>();
         obtainClass = FindObjectOfType<ObtainImage>();
-        cabinet = FindObjectOfType<cabinetAnim>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
 
@@ -167,6 +165,9 @@ public class InteractionController : MonoBehaviour
             {
                 if (hitInfo.transform.localPosition.z < -45)
                 {
+                    audioSource.clip = audio[2];
+                    audioSource.volume = 0.5f;
+                    audioSource.Play();
                     hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetclose");
                 }
                 else
@@ -176,6 +177,9 @@ public class InteractionController : MonoBehaviour
                     {
                         if (gameObject.transform.name == "silverKey(Clone)")
                         {
+                            audioSource.clip = audio[3];
+                            audioSource.volume = 0.5f;
+                            audioSource.Play();
                             hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
                             StartCoroutine("showUsingSuccessT");
 
@@ -186,6 +190,9 @@ public class InteractionController : MonoBehaviour
                         }
                         else
                         {
+                            audioSource.clip = audio[4];
+                            audioSource.volume = 1f;
+                            audioSource.Play();
                             justThingGuide("열쇠가 필요합니다.");
                         }
                     }
@@ -246,6 +253,7 @@ public class InteractionController : MonoBehaviour
                         bookcase.transform.GetComponent<Animator>().SetTrigger("open");
 
                         audioSource.clip = audio[0];
+                        audioSource.volume = 0.3f;
                         audioSource.Play();
 
                         itemWindow.deleteAnim();
@@ -265,6 +273,9 @@ public class InteractionController : MonoBehaviour
                 {
                     hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
                     tower.transform.GetComponent<Animator>().SetTrigger("open");
+                    audioSource.clip = audio[6];
+                    audioSource.volume = 0.5f;
+                    audioSource.Play();
                     putKey = false;
                 }
             }
@@ -289,6 +300,9 @@ public class InteractionController : MonoBehaviour
                 {
                     if (gameObject.transform.name == "goldKey(Clone)")
                     {
+                        audioSource.clip = audio[5];
+                        audioSource.volume = 0.5f;
+                        audioSource.Play();
                         StartCoroutine("showUsingSuccessT");
                         itemWindow.destroyKey();
                         putKey = true;
@@ -509,8 +523,9 @@ public class InteractionController : MonoBehaviour
 
     IEnumerator thunder()
     {
-        yield return new WaitForSeconds(5F);
-        audioSource.clip = audio[2];
+        yield return new WaitForSeconds(8F);
+        audioSource.clip = audio[1];
+        audioSource.volume = 0.05f;
         audioSource.Play();
         yield return new WaitForSeconds(3F);
     }
