@@ -39,6 +39,7 @@ public class InteractionController : MonoBehaviour
     ItemWindowScript itemWindow;
     MoveScript moveScript;
     ObtainImage obtainClass;
+    cabinetAnim cabinet;
 
     GameObject nowGameObject;
     GameObject gameObject;
@@ -68,6 +69,7 @@ public class InteractionController : MonoBehaviour
         itemWindow = FindObjectOfType<ItemWindowScript>();
         moveScript = FindObjectOfType<MoveScript>();
         obtainClass = FindObjectOfType<ObtainImage>();
+        cabinet = FindObjectOfType<cabinetAnim>();
 
         sprites = Resources.LoadAll<Sprite>("Item");
 
@@ -99,94 +101,97 @@ public class InteractionController : MonoBehaviour
 
     void Contact()
     {
-        if (hitInfo.transform.CompareTag("box"))
+        if (!choice.gameObject.activeSelf)
         {
-            crosshairInter();
-            if (Input.GetMouseButtonDown(0))
+            if (hitInfo.transform.CompareTag("box"))
             {
-                text.text = "박스를 치우시겠습니까? (y/n)";
-                TextBar.SetActive(true);
-                click = true;
-            }
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                Obtain.SetActive(false);
-                choice.SetActive(false);
-                TextBar.SetActive(false);
-                interacting = false;
-                hitInfo.collider.gameObject.SetActive(false);
-            }
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                interacting = false;
-            }
-
-        }
-        else if (hitInfo.transform.CompareTag("picture"))
-        {
-            crosshairInter();
-
-            if (Input.GetMouseButtonDown(0))
-                justThingGuide("그림입니다");
-        }
-        else if (hitInfo.transform.CompareTag("interacte"))
-        {
-            crosshairInter();
-
-            obtainItemGuide("책", 0);
-            inputKey("book");
-        }
-        else if (hitInfo.transform.CompareTag("silverkey"))
-        {
-            crosshairInter();
-
-            obtainItemGuide("은색키", 4);
-            inputKey("silverKey");
-        }
-        else if (hitInfo.transform.CompareTag("goldkey"))
-        {
-            crosshairInter();
-
-            obtainItemGuide("골드키", 2);
-            inputKey("goldKey");
-        }
-        else if (hitInfo.transform.CompareTag("crystal"))
-        {
-            crosshairInter();
-
-            obtainItemGuide("크리스탈", 1);
-            inputKey("crystal");
-        }
-        else if (hitInfo.transform.CompareTag("cabinet"))
-        {
-            crosshairInter();
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (hitInfo.transform.localPosition.z < -45)
+                crosshairInter();
+                if (Input.GetMouseButtonDown(0))
                 {
-                    audioSource.clip = audio[2];
-                    audioSource.volume = 0.5f;
-                    audioSource.Play();
-                    hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetclose");
+                    text.text = "박스를 치우시겠습니까? (y/n)";
+                    TextBar.SetActive(true);
+                    click = true;
                 }
-                else
+                if (Input.GetKeyDown(KeyCode.Y))
                 {
-                    checkUsing();
-                    if (itemUsing) // 실버키가 사용중이고 캐비닛이 선택되었다면 캐비닛 문을 여는 애니메이션 실행
-                    {
-                        if (gameObject.transform.name == "silverKey(Clone)")
-                        {
-                            audioSource.clip = audio[3];
-                            audioSource.volume = 0.5f;
-                            audioSource.Play();
-                            hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
-                            StartCoroutine("showUsingSuccessT");
+                    Obtain.SetActive(false);
+                    choice.SetActive(false);
+                    TextBar.SetActive(false);
+                    interacting = false;
+                    hitInfo.collider.gameObject.SetActive(false);
+                }
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    interacting = false;
+                }
 
-                            itemWindow.deleteAnim();
-                            nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-                            if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
-                                nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            }
+            else if (hitInfo.transform.CompareTag("picture"))
+            {
+                crosshairInter();
+
+                if (Input.GetMouseButtonDown(0))
+                    justThingGuide("그림입니다");
+            }
+            else if (hitInfo.transform.CompareTag("interacte"))
+            {
+                crosshairInter();
+
+                obtainItemGuide("책", 0);
+                inputKey("book");
+            }
+            else if (hitInfo.transform.CompareTag("silverkey"))
+            {
+                crosshairInter();
+
+                obtainItemGuide("은색키", 4);
+                inputKey("silverKey");
+            }
+            else if (hitInfo.transform.CompareTag("goldkey"))
+            {
+                crosshairInter();
+
+                obtainItemGuide("골드키", 2);
+                inputKey("goldKey");
+            }
+            else if (hitInfo.transform.CompareTag("crystal"))
+            {
+                crosshairInter();
+
+                obtainItemGuide("크리스탈", 1);
+                inputKey("crystal");
+            }
+            else if (hitInfo.transform.CompareTag("cabinet"))
+            {
+                crosshairInter();
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (hitInfo.transform.localPosition.z < -45)
+                    {
+                        audioSource.clip = audio[2];
+                        audioSource.volume = 0.5f;
+                        audioSource.Play();
+                        hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetclose");
+                    }
+                    else
+                    {
+                        checkUsing();
+                        if (itemUsing) // 실버키가 사용중이고 캐비닛이 선택되었다면 캐비닛 문을 여는 애니메이션 실행
+                        {
+                            if (gameObject.transform.name == "silverKey(Clone)")
+                            {
+                                audioSource.clip = audio[3];
+                                audioSource.volume = 0.5f;
+                                audioSource.Play();
+                                hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
+                                StartCoroutine("showUsingSuccessT");
+
+                                itemWindow.deleteAnim();
+                                nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                                if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                                    nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                            }
                         }
                         else
                         {
@@ -196,65 +201,37 @@ public class InteractionController : MonoBehaviour
                             justThingGuide("열쇠가 필요합니다.");
                         }
                     }
-                    else
-                    {
-                        justThingGuide("열쇠가 필요합니다.");
-                    }
                 }
             }
-        }
-        else if (hitInfo.transform.CompareTag("pliers"))
-        {
-            crosshairInter();
-
-            obtainItemGuide("드라이버", 3);
-            inputKey("pliers");
-        }
-        else if (hitInfo.transform.CompareTag("screw"))
-        {
-            crosshairInter();
-
-            if (Input.GetMouseButtonDown(0))
+            else if (hitInfo.transform.CompareTag("pliers"))
             {
-                checkUsing();
-                if (itemUsing) 
-                {
-                    if (gameObject.transform.name == "plier(Clone)")
-                    {
-                        screwNum += 1;
+                crosshairInter();
 
-                        hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
-                        StartCoroutine("showUsingSuccessT");
-                        
-                    }
-                }
-
-                if (screwNum >= 2)
-                {
-                    StartCoroutine("waitaMinute");
-
-                    itemWindow.deleteAnim();
-                    nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
-                    if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
-                        nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                }
+                obtainItemGuide("드라이버", 3);
+                inputKey("pliers");
             }
-        }
-        else if (hitInfo.transform.CompareTag("book"))
-        {
-            if (Input.GetMouseButtonDown(0))
+            else if (hitInfo.transform.CompareTag("screw"))
             {
-                checkUsing();
-                if (itemUsing)
-                {
-                    if (gameObject.transform.name == "book(Clone)")
-                    {
-                        StartCoroutine("showUsingSuccessT");
-                        bookcase.transform.GetComponent<Animator>().SetTrigger("open");
+                crosshairInter();
 
-                        audioSource.clip = audio[0];
-                        audioSource.volume = 0.3f;
-                        audioSource.Play();
+                if (Input.GetMouseButtonDown(0))
+                {
+                    checkUsing();
+                    if (itemUsing)
+                    {
+                        if (gameObject.transform.name == "plier(Clone)")
+                        {
+                            screwNum += 1;
+
+                            hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                            StartCoroutine("showUsingSuccessT");
+
+                        }
+                    }
+
+                    if (screwNum >= 2)
+                    {
+                        StartCoroutine("waitaMinute");
 
                         itemWindow.deleteAnim();
                         nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
@@ -263,84 +240,108 @@ public class InteractionController : MonoBehaviour
                     }
                 }
             }
-                
-        }
-        else if (hitInfo.transform.CompareTag("right"))
-        {
-            if (Input.GetMouseButtonDown(0))
+            else if (hitInfo.transform.CompareTag("book"))
             {
-                if (putKey)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
-                    tower.transform.GetComponent<Animator>().SetTrigger("open");
-                    audioSource.clip = audio[6];
-                    audioSource.volume = 0.5f;
-                    audioSource.Play();
-                    putKey = false;
-                }
-            }
-        }
-        else if (hitInfo.transform.CompareTag("button"))
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (putKey)
-                {
-                    hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
-                    putKey = false;
-                }
-            }
-        }
-        else if (hitInfo.transform.CompareTag("InputKey"))
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                checkUsing();
-                if (itemUsing)
-                {
-                    if (gameObject.transform.name == "goldKey(Clone)")
+                    checkUsing();
+                    if (itemUsing)
                     {
-                        audioSource.clip = audio[5];
-                        audioSource.volume = 0.5f;
-                        audioSource.Play();
-                        StartCoroutine("showUsingSuccessT");
-                        itemWindow.destroyKey();
-                        putKey = true;
-                        ClickNo();
+                        if (gameObject.transform.name == "book(Clone)")
+                        {
+                            StartCoroutine("showUsingSuccessT");
+                            bookcase.transform.GetComponent<Animator>().SetTrigger("open");
+
+                            audioSource.clip = audio[0];
+                            audioSource.volume = 0.3f;
+                            audioSource.Play();
+
+                            itemWindow.deleteAnim();
+                            nowGameObject.transform.GetComponent<Image>().color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                            if (nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.activeSelf)
+                                nowGameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                        }
                     }
                 }
-                else
-                {
-                    justThingGuide("골드키가 필요합니다");
-                }
-            }
-        }
-        else if (hitInfo.transform.CompareTag("final"))
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                bool existC = false;
-                GameObject crystalG = GameObject.Find("UI");
-                crystalG = crystalG.transform.GetChild(1).gameObject;
 
-                for (int i = 2; i < crystalG.transform.childCount; i++)
+            }
+            else if (hitInfo.transform.CompareTag("right"))
+            {
+                if (Input.GetMouseButtonDown(0))
                 {
-                    if (crystalG.transform.GetChild(i).transform.GetChild(0).name == "crystal(Clone)")
-                        existC = true;
-                }
-                if (existC)
-                {
-                    Debug.Log("탈출성공");
-                }
-                else
-                {
-                    justThingGuide("보석을 찾아야합니다.");
+                    if (putKey)
+                    {
+                        hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                        tower.transform.GetComponent<Animator>().SetTrigger("open");
+                        audioSource.clip = audio[6];
+                        audioSource.volume = 0.5f;
+                        audioSource.Play();
+                        putKey = false;
+                    }
                 }
             }
-        }
-        else
-        {
-            NotContact();
+            else if (hitInfo.transform.CompareTag("button"))
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (putKey)
+                    {
+                        hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
+                        putKey = false;
+                    }
+                }
+            }
+            else if (hitInfo.transform.CompareTag("InputKey"))
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    checkUsing();
+                    if (itemUsing)
+                    {
+                        if (gameObject.transform.name == "goldKey(Clone)")
+                        {
+                            audioSource.clip = audio[5];
+                            audioSource.volume = 1f;
+                            audioSource.Play();
+                            StartCoroutine("showUsingSuccessT");
+                            itemWindow.destroyKey();
+                            putKey = true;
+                            ClickNo();
+                        }
+                    }
+                    else
+                    {
+                        justThingGuide("골드키가 필요합니다");
+                    }
+                }
+            }
+            else if (hitInfo.transform.CompareTag("final"))
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    bool existC = false;
+                    GameObject crystalG = GameObject.Find("UI");
+                    crystalG = crystalG.transform.GetChild(1).gameObject;
+
+                    for (int i = 2; i < crystalG.transform.childCount; i++)
+                    {
+                        if (crystalG.transform.GetChild(i).transform.GetChild(0).name == "crystal(Clone)")
+                            existC = true;
+                    }
+                    if (existC)
+                    {
+                        Debug.Log("탈출성공");
+                    }
+                    else
+                    {
+                        justThingGuide("보석을 찾아야합니다.");
+                    }
+                }
+            }
+            else
+            {
+                NotContact();
+            }
         }
     }
 
@@ -398,8 +399,6 @@ public class InteractionController : MonoBehaviour
             ObtainText.text = name;
             panel.SetActive(true);
             choice.SetActive(false);
-
-            StartCoroutine("thunder");
         }
     }
 
@@ -519,14 +518,5 @@ public class InteractionController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.3F);
         picture.transform.GetComponent<Animator>().SetTrigger("fall");
-    }
-
-    IEnumerator thunder()
-    {
-        yield return new WaitForSeconds(8F);
-        audioSource.clip = audio[1];
-        audioSource.volume = 0.05f;
-        audioSource.Play();
-        yield return new WaitForSeconds(3F);
     }
 }

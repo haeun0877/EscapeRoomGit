@@ -7,11 +7,11 @@ public class cabinetAnim : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] AudioClip[] audio;
     AudioSource audioSource;
-    RaycastHit hitInfo;
+    RaycastHit hitInfo; 
+    GameObject choice;
 
     InteractionController interController;
     int num;
-    bool click;
 
     // Start is called before the first frame update
     void Start()
@@ -19,8 +19,8 @@ public class cabinetAnim : MonoBehaviour
         interController = FindObjectOfType<InteractionController>();
         audioSource = this.GetComponent<AudioSource>();
         cam = Camera.main;
-        num = 0;
-        click = false;
+        num = 0; 
+        choice = GameObject.Find("UI").transform.GetChild(5).gameObject;
     }
 
     // Update is called once per frame
@@ -38,10 +38,6 @@ public class cabinetAnim : MonoBehaviour
         {
             Contact();
         }
-        else
-        {
-            //NotContact();
-        }
     }
 
     void Contact()
@@ -54,7 +50,6 @@ public class cabinetAnim : MonoBehaviour
                 if (this.gameObject.tag != "cabinet")
                 {
                     startAnim();
-
                 }
             }
         }
@@ -62,20 +57,21 @@ public class cabinetAnim : MonoBehaviour
 
     public void startAnim()
     {
-         num += 1;
-         
-        if (num % 2 == 1)
+        if (!choice.activeSelf)
         {
-            audioSource.clip = audio[0];
-            audioSource.Play();
-            this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"open");
-        }
-        else
-        {
-            audioSource.clip = audio[1];
-            audioSource.Play();
-            this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag+"close");
+            num += 1;
+            if (num % 2 == 1)
+            {
+                audioSource.clip = audio[0];
+                audioSource.Play();
+                this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag + "open");
+            }
+            else
+            {
+                audioSource.clip = audio[1];
+                audioSource.Play();
+                this.gameObject.GetComponent<Animator>().SetTrigger(this.gameObject.tag + "close");
+            }
         }
     }
-
 }
