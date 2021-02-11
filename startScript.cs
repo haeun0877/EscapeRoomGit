@@ -17,7 +17,7 @@ public class startScript : MonoBehaviour
         Explain.onClick.AddListener(showExplainW);
         StartB.onClick.AddListener(startScene);
         closeB.onClick.AddListener(closeW);
-
+        Screen.SetResolution(960, 600, true);
     }
 
     // Update is called once per frame

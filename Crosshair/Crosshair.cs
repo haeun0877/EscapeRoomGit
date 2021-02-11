@@ -9,7 +9,7 @@ public class Crosshair : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Screen.SetResolution(960, 600, true);
     }
 
     // Update is called once per frame
@@ -25,8 +25,8 @@ public class Crosshair : MonoBehaviour
         float t_cursorPosX = tf_Crosshair.localPosition.x;
         float t_cursorPosY = tf_Crosshair.localPosition.y;
 
-        t_cursorPosX = Mathf.Clamp(t_cursorPosX, -Screen.width + 50, -Screen.width +910);
-        t_cursorPosY = Mathf.Clamp(t_cursorPosY, -Screen.height + 50, -Screen.height +550);
+        t_cursorPosX = Mathf.Clamp(t_cursorPosX, -Screen.width + 30, -Screen.width +930);
+        t_cursorPosY = Mathf.Clamp(t_cursorPosY, -Screen.height + 30, -Screen.height +570);
 
         tf_Crosshair.localPosition = new Vector2(t_cursorPosX, t_cursorPosY);
     }
