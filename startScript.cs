@@ -34,7 +34,7 @@ public class startScript : MonoBehaviour
 
     void startScene()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Demo_scene");
     }
 
     void closeW()

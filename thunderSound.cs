@@ -17,10 +17,10 @@ public class thunderSound : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(8F);
-            audioSource.volume = 0.05f;
+            yield return new WaitForSeconds(10F);
+            audioSource.volume = 0.06f;
             audioSource.Play();
-            yield return new WaitForSeconds(5F);
+            yield return new WaitForSeconds(10F);
         }
     }
 }

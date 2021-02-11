@@ -29,6 +29,8 @@ public class InteractionController : MonoBehaviour
     [SerializeField] GameObject picture;
     [SerializeField] GameObject bookcase;
     [SerializeField] GameObject tower;
+    [SerializeField] GameObject endPanel;
+    [SerializeField] GameObject titleName;
 
     [SerializeField] AudioClip[] audio;
     AudioSource audioSource;
@@ -170,7 +172,7 @@ public class InteractionController : MonoBehaviour
                     if (hitInfo.transform.localPosition.z < -45)
                     {
                         audioSource.clip = audio[2];
-                        audioSource.volume = 0.5f;
+                        audioSource.volume = 1f;
                         audioSource.Play();
                         hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetclose");
                     }
@@ -182,7 +184,7 @@ public class InteractionController : MonoBehaviour
                             if (gameObject.transform.name == "silverKey(Clone)")
                             {
                                 audioSource.clip = audio[3];
-                                audioSource.volume = 0.5f;
+                                audioSource.volume =1f;
                                 audioSource.Play();
                                 hitInfo.transform.GetComponent<Animator>().SetTrigger("cabinetopen");
                                 StartCoroutine("showUsingSuccessT");
@@ -196,7 +198,7 @@ public class InteractionController : MonoBehaviour
                         else
                         {
                             audioSource.clip = audio[4];
-                            audioSource.volume = 1f;
+                            audioSource.volume = 1.2f;
                             audioSource.Play();
                             justThingGuide("열쇠가 필요합니다.");
                         }
@@ -253,7 +255,7 @@ public class InteractionController : MonoBehaviour
                             bookcase.transform.GetComponent<Animator>().SetTrigger("open");
 
                             audioSource.clip = audio[0];
-                            audioSource.volume = 0.3f;
+                            audioSource.volume = 0.9f;
                             audioSource.Play();
 
                             itemWindow.deleteAnim();
@@ -274,7 +276,7 @@ public class InteractionController : MonoBehaviour
                         hitInfo.transform.GetComponent<Animator>().SetTrigger("put");
                         tower.transform.GetComponent<Animator>().SetTrigger("open");
                         audioSource.clip = audio[6];
-                        audioSource.volume = 0.5f;
+                        audioSource.volume = 1f;
                         audioSource.Play();
                         putKey = false;
                     }
@@ -301,7 +303,7 @@ public class InteractionController : MonoBehaviour
                         if (gameObject.transform.name == "goldKey(Clone)")
                         {
                             audioSource.clip = audio[5];
-                            audioSource.volume = 1f;
+                            audioSource.volume = 1.2f;
                             audioSource.Play();
                             StartCoroutine("showUsingSuccessT");
                             itemWindow.destroyKey();
@@ -330,7 +332,8 @@ public class InteractionController : MonoBehaviour
                     }
                     if (existC)
                     {
-                        Debug.Log("탈출성공");
+                        endPanel.gameObject.GetComponent<Animator>().SetTrigger("end");
+                        StartCoroutine("wait");
                     }
                     else
                     {
@@ -518,5 +521,15 @@ public class InteractionController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.3F);
         picture.transform.GetComponent<Animator>().SetTrigger("fall");
+    }
+
+    IEnumerator wait()
+    {
+        titleName.SetActive(true);
+        yield return new WaitForSeconds(2F);
+        audioSource.clip = audio[1];
+        audioSource.volume = 1f;
+        audioSource.Play();
+        titleName.transform.GetComponent<Animator>().SetTrigger("show");
     }
 }
